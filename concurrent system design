@@ -1,0 +1,63 @@
+TASK 2-> Concurrent System Design
+
+The system is designed to handle high concurrency and ensure low latency by employing horizontal scaling through auto-scaling and load balancing. 
+Caching improves response times by reducing database load.
+
+For failure handling, the system ensures graceful degradation, where cached or default data is provided during high load or failure. 
+Redundancy through database replication and microservice failover mechanisms ensures high availability, while circuit breakers prevent cascading failures.
+Real-time monitoring helps detect issues early, allowing quick intervention to maintain system stability.
+
+
+Solution Approach->
+
+The backend needs to scale efficiently under heavy concurrent load. The following components are key for handling such load and maintaining low latency:
+Load Balancer: Distributes requests evenly across API servers to prevent any single server from being overloaded.
+Cache: Stores previously computed routing plans to reduce re-computation and lower response times.
+Datastore: Holds long-term data like container locations, historical move plans, and other metadata.
+API Servers: Handles requests and applies the optimization algorithm.
+Monitoring & Alerts: Tracks the performance of the system and triggers alerts if any part of the system fails or starts to degrade.
+
+High-Level System Diagram:
+sql
+Copy
+Edit
+                             -----------------
+                            | Client Requests |
+                             -----------------
+                                    |
+                                    v
+                               Load Balance
+                   -----------------+----------------  
+                                   |
+                                   v
+         |Cache Layer| <--- (if miss) --> | API Servers | 
+  |(Redis/Memcached)|                    |(FastAPI/Flask)|
+           |                                    |
+           v                                    v
+      ------------------               ---------------------
+     |    Datastore     |             |Monitoring & Logs| 
+     |   (SQL/NoSQL)    | <------->  |(Prometheus, Grafana)|
+      ------------------               ---------------------
+
+KEY COMPONENTS->
+
+Load Balancer- Distributes incoming API traffic across multiple backend instances to avoid overloading any single instance.
+
+Cache- Stores frequently accessed data (Redis/Memcached) to reduce response times and lighten the load on the database.
+
+Optimisation API (Microservices)- Handles the core logic of optimization based on real-world constraints, designed to scale with high concurrency.
+
+Datastore- Stores persistent data like port schedules and priority rules (Relational or NoSQL databases).
+
+Monitoring & Metrics- Monitors system performance and health using tools like Prometheus and Grafana, ensuring early detection of issues and performance bottlenecks.
+
+  
+Scalability and Failure Handling:
+
+Horizontal Scaling:
+API servers can scale horizontally based on incoming traffic. If traffic increases, additional API servers can be spun up to handle more requests
+
+Conclusion:
+This architecture ensures that the optimization API can handle high concurrency, maintain low latency, and degrade gracefully under load. Horizontal scaling, 
+load balancing, caching, and auto-scaling ensure that the system can serve requests efficiently while handling failures seamlessly
+  
