@@ -1,0 +1,17 @@
+JSON  REQUEST 
+   
+{ 
+  "yardMap": [ 
+    [5, 8, 9], 
+    [4, 3, 6], 
+    [7, 2, 1] 
+  ] 
+} 
+ 
+ 
+JSON  RESPONSE 
+{ 
+  "row": 2, 
+  "column": 2, 
+  "score": 1 
+} 
